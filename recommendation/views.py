@@ -1,4 +1,7 @@
 # views.py
+import json
+import os
+
 import requests
 import io
 import numpy as np
@@ -14,7 +17,12 @@ from firebase_admin import credentials, firestore
 
 
 # Initialize Firebase
-cred = credentials.Certificate(r"C:\My Projects\Firebase Key\virtualshoetryon-firebase-adminsdk-wdbcj-9b88d0d471.json")
+firebase_config = os.getenv("FIREBASE_CREDENTIALS")
+
+if not firebase_config:
+    raise ValueError("Firebase credentials not found in environment variables!")
+
+cred = credentials.Certificate(json.loads(firebase_config))
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
